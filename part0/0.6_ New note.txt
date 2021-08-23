@@ -1,0 +1,28 @@
+title 0.6: New note
+
+note over browser:
+user types something into the text field
+and clicks on save button
+end note
+
+note over browser:
+browser starts executing js-code
+that creates a new note and adds it
+to the notes list, rerenders the note list
+on the page and sends the new note 
+to the server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over server:
+POST-request contains new note
+as JSON-string containing both
+the content of the note (content)
+and the timestamp (date)
+end note
+server-->browser: HTTP status code 201
+note over browser:
+201 indicates that the request has 
+been fulfilled and has resulted in one 
+or more new resources being created
+end note
