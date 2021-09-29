@@ -16,6 +16,10 @@ const App = (props) => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const total = good + neutral + bad;
+  const average = (good - bad) / total;
+  const positive = (good / total) * 100 + ' %';
+
   const incrementGoodCount = () => setGood(good + 1);
   const incrementNeutralCount = () => setNeutral(neutral + 1);
   const incrementBadCount = () => setBad(bad + 1);
@@ -27,9 +31,14 @@ const App = (props) => {
       <Button onClick={incrementNeutralCount} text='neutral' />
       <Button onClick={incrementBadCount} text='bad' />
       <Header title='statistics' />
-      <Display text='good' counter={good} />
-      <Display text='neutral' counter={neutral} />
-      <Display text='bad' counter={bad} />
+      <div>
+        <Display text='good' counter={good} />
+        <Display text='neutral' counter={neutral} />
+        <Display text='bad' counter={bad} />
+        <Display text='all' counter={total} />
+        <Display text='average' counter={average} />
+        <Display text='positive' counter={positive} />
+      </div>
     </div>
   )
 };
