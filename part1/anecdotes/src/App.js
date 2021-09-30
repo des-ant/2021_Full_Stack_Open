@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 
-const Anecdote = ({anecdote}) => <p>{anecdote}</p>;
+const Anecdote = ({anecdote, votes}) => (
+  <div>
+    <p>{anecdote}</p>
+    <p>has {votes} votes</p>
+  </div>
+);
 
 const Button = ({ onClick, text }) => (
   <button onClick={onClick}>
@@ -17,19 +22,32 @@ const App = () => {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
-  ]
+  ];
 
-  const [selected, setSelected] = useState(0)
+  // Save selected anecdote to its own state
+  const [selected, setSelected] = useState(0);
+  // Store votes of each anecdote in array, initially zero filled
+  const [points, setPoints] = useState(new Uint8Array(anecdotes.length));
 
   // Generate random int
   const getRandomInt = (max) => Math.floor(Math.random() * max);
-
   // Choose random anecdote
   const getRandomAnecdote = () => setSelected(getRandomInt(anecdotes.length));
 
+  // Update number of votes for a given anecdote
+  const voteAnecdote = (points, selected) => {
+    // Copy array of votes to avoid mutation
+    const copy = [...points];
+    // Increment the value in position of selected anecdote by one
+    copy[selected] += 1;
+    // Update votes state with udpated array
+    setPoints(copy);
+  };
+
   return (
     <div>
-      <Anecdote anecdote={anecdotes[selected]} />
+      <Anecdote anecdote={anecdotes[selected]} votes={points[selected]} />
+      <Button onClick={() => voteAnecdote(points, selected)} text='vote' />
       <Button onClick={getRandomAnecdote} text='next anecdote' />
     </div>
   )
