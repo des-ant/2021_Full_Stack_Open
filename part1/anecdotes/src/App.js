@@ -13,6 +13,8 @@ const Button = ({ onClick, text }) => (
   </button>
 );
 
+const Header = ({ title }) => <h1>{title}</h1>;
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -44,11 +46,22 @@ const App = () => {
     setPoints(copy);
   };
 
+  // Get index of anecdote with most votes
+  const indexOfMostVotes = points.reduce(
+    (bestIndexSoFar, currentlyTestedValue, currentlyTestedIndex, array) => 
+    currentlyTestedValue > array[bestIndexSoFar] ?
+    currentlyTestedIndex :
+    bestIndexSoFar, 0
+  );
+
   return (
     <div>
+      <Header title={'Anecdote of the day'} />
       <Anecdote anecdote={anecdotes[selected]} votes={points[selected]} />
       <Button onClick={() => voteAnecdote(points, selected)} text='vote' />
       <Button onClick={getRandomAnecdote} text='next anecdote' />
+      <Header title={'Anecdote with most votes'} />
+      <Anecdote anecdote={anecdotes[indexOfMostVotes]} votes={points[indexOfMostVotes]} />
     </div>
   )
 }
