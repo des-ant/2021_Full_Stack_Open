@@ -8,8 +8,8 @@ const Button = ({ onClick, text }) => (
   </button>
 );
 
-const Display = ({text, counter, isPercentage}) => (
-  <p>{text} { isNaN(counter) ? 0 : counter} { isPercentage ? '%' : '' }</p>
+const StatisticLine = ({text, value, isPercentage}) => (
+  <p>{text} { isNaN(value) ? 0 : value} { isPercentage ? '%' : '' }</p>
 );
 
 const Statistics = ({ good, neutral, bad, total, average, positive }) => {
@@ -22,12 +22,12 @@ const Statistics = ({ good, neutral, bad, total, average, positive }) => {
   }
   return (
     <div>
-      <Display text='good' counter={good} />
-      <Display text='neutral' counter={neutral} />
-      <Display text='bad' counter={bad} />
-      <Display text='all' counter={total} />
-      <Display text='average' counter={average} />
-      <Display text='positive' counter={positive} isPercentage={true} />
+      <StatisticLine text='good' value={good} />
+      <StatisticLine text='neutral' value={neutral} />
+      <StatisticLine text='bad' value={bad} />
+      <StatisticLine text='all' value={total} />
+      <StatisticLine text='average' value={average} />
+      <StatisticLine text='positive' value={positive} isPercentage={true} />
     </div>
   )
 };
