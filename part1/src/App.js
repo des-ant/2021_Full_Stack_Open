@@ -8,7 +8,20 @@ const Button = ({ onClick, text }) => (
   </button>
 );
 
-const Display = ({text, counter}) => <p>{text} {counter}</p>;
+const Display = ({text, counter, isPercentage}) => (
+  <p>{text} { isNaN(counter) ? 0 : counter} { isPercentage ? '%' : '' }</p>
+);
+
+const Statistics = ({ good, neutral, bad, total, average, positive }) => (
+  <div>
+    <Display text='good' counter={good} />
+    <Display text='neutral' counter={neutral} />
+    <Display text='bad' counter={bad} />
+    <Display text='all' counter={total} />
+    <Display text='average' counter={average} />
+    <Display text='positive' counter={positive} isPercentage={true} />
+  </div>
+);
 
 const App = (props) => {
   // save clicks of each button to its own state
@@ -18,7 +31,7 @@ const App = (props) => {
 
   const total = good + neutral + bad;
   const average = (good - bad) / total;
-  const positive = (good / total) * 100 + ' %';
+  const positive = (good / total) * 100;
 
   const incrementGoodCount = () => setGood(good + 1);
   const incrementNeutralCount = () => setNeutral(neutral + 1);
@@ -31,14 +44,7 @@ const App = (props) => {
       <Button onClick={incrementNeutralCount} text='neutral' />
       <Button onClick={incrementBadCount} text='bad' />
       <Header title='statistics' />
-      <div>
-        <Display text='good' counter={good} />
-        <Display text='neutral' counter={neutral} />
-        <Display text='bad' counter={bad} />
-        <Display text='all' counter={total} />
-        <Display text='average' counter={average} />
-        <Display text='positive' counter={positive} />
-      </div>
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive={positive} />
     </div>
   )
 };
