@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -51,46 +54,32 @@ const App = () => {
   // Use text to filter names (case-insensitive)
   // Else if no text present, show all people
   const peopleToShow = (searchField.length > 0)
-    ? persons.filter(person => person.name.toUpperCase().
-      includes(searchField.toUpperCase()))
+    ? persons.filter(person => person.name.toUpperCase()
+      .includes(searchField.toUpperCase()))
     : persons;
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with
-        <input
-          value={searchField}
-          onChange={handleSearchFieldChange}
-        />
-      </div>
-      <h2>Add a new person</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name:
-          <input
-            value={newName}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          number:
-          <input
-            value={newNumber}
-            onChange={handleNumberChange}
-        />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {peopleToShow.map(person =>
-          <li key={person.id}>{person.name} {person.number}</li>
-        )}
-      </ul>
+
+      <Filter
+        searchField={searchField}
+        handleSearchFieldChange={handleSearchFieldChange}
+      />
+      
+      <h3>Add a new person</h3>
+
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
+
+      <h3>Numbers</h3>
+
+      <Persons peopleToShow={peopleToShow} />
     </div>
   )
 }
