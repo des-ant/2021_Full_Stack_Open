@@ -10,18 +10,15 @@ const App = () => {
 
   // Set initial state using data fetched from API using axios
   const hook = () => {
-    console.log('effect');
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
-        console.log('promise fulfilled');
         setCountries(response.data);
       });
   };
 
   // Complete fetching with an Effect hook
   useEffect(hook, []);
-  console.log('render', countries.length, 'countries');
 
   const handleSearchFieldChange = (event) => {
     // Update field value when typing in field
