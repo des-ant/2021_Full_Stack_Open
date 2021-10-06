@@ -1,20 +1,7 @@
 import React from 'react';
 import Country from './Country';
 
-const Countries = ({ countriesToShow }) => {
-  // Sort list of countries in alphabetic order of name
-  // Copy array before sorting to prevent mutation
-  countriesToShow = [...countriesToShow].sort(
-    (a, b) => (a.name.common > b.name.common) ? 1 : -1
-  );
-
-  // Show country details when pressing on button
-  const showCountryPage = (event, country) => {
-    // Prevent page reload
-    event.preventDefault();
-    console.log(country);
-  };
-
+const Countries = ({ countriesToShow, showCountryPage }) => {
   // If there are too many (over 10) countries that match query,
   // then prompt user to make query more specific
   if (countriesToShow.length > 10) {
@@ -30,12 +17,18 @@ const Countries = ({ countriesToShow }) => {
       <Country country={country} />
     );
   } else {
+    // Sort list of countries in alphabetic order of name
+    // Copy array before sorting to prevent mutation
+    const countriesToShowSorted = [...countriesToShow].sort(
+      (a, b) => (a.name.common > b.name.common) ? 1 : -1
+    );
+
     return (
       <div>
-        {countriesToShow.map(country =>
+        {countriesToShowSorted.map(country =>
           <div key={country.cca2}>
             {country.name.common}
-            <button onClick={(e) => showCountryPage(e, {country})}>show</button>
+            <button onClick={(e) => showCountryPage(e, country)}>show</button>
           </div>
         )}
       </div>
