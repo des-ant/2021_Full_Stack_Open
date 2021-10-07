@@ -15,8 +15,8 @@ const App = () => {
   useEffect(() => {
     personService
       .getAll()
-      .then(response => {
-        setPersons(response.data);
+      .then(initialPersons => {
+        setPersons(initialPersons);
       });
   }, []);
 
@@ -37,9 +37,9 @@ const App = () => {
     // Add person to backend server
     personService
       .create(personObject)
-      .then(response => {
+      .then(returnedPerson => {
         // Add person to persons list without mutating list
-        setPersons(persons.concat(personObject));
+        setPersons(persons.concat(returnedPerson));
         // Clear input fields
         setNewName('');
         setNewNumber('');
