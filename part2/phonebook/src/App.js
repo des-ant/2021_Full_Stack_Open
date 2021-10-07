@@ -34,13 +34,19 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      // id: persons.length + 1,
     };
-    // Add person to persons list without mutating list
-    setPersons(persons.concat(personObject));
-    // Clear input fields
-    setNewName('');
-    setNewNumber('');
+
+    // Add person to backend server
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        // Add person to persons list without mutating list
+        setPersons(persons.concat(personObject));
+        // Clear input fields
+        setNewName('');
+        setNewNumber('');
+      });
   }
 
   const handleNameChange = (event) => {
