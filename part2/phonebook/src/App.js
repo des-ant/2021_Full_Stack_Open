@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import personService from './services/persons';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]);
@@ -11,16 +11,14 @@ const App = () => {
   const [ searchField, setSearchField ] = useState('');
 
   // Set initial state using data fetched from server using axios
-  const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
+  // Complete fetching with an Effect hook
+  useEffect(() => {
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data);
       });
-  };
-
-  // Complete fetching with an Effect hook
-  useEffect(hook, []);
+  }, []);
 
   const addPerson = (event) => {
     // Prevent page reload
@@ -34,12 +32,11 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      // id: persons.length + 1,
     };
 
     // Add person to backend server
-    axios
-      .post('http://localhost:3001/persons', personObject)
+    personService
+      .create(personObject)
       .then(response => {
         // Add person to persons list without mutating list
         setPersons(persons.concat(personObject));
