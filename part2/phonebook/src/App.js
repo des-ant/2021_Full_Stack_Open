@@ -48,7 +48,23 @@ const App = () => {
 
   const deletePerson = (id) => {
     const person = persons.find(p => p.id === id);
-    window.confirm(`Delete ${person.name} ?`);
+    const shouldDeletePerson = window.confirm(`Delete ${person.name} ?`);
+
+    if (shouldDeletePerson) {
+      personService
+        .deletePerson(id)
+        .then(returnedPerson => {
+          // Remove person from state and update UI
+          setPersons(persons.filter(p => p.id !== id));
+        })
+        .catch(error => {
+          alert(
+            `The person '${person.name}' was already deleted from server`
+          );
+          // Remove person from state and update UI
+          setPersons(persons.filter(p => p.id !== id));
+        })
+    }
   };
 
   const handleNameChange = (event) => {
