@@ -23,11 +23,51 @@ const App = () => {
   const addPerson = (event) => {
     // Prevent page reload
     event.preventDefault();
-    // Prevent user from adding already existing names
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+
+    // Prevent user from adding empty values
+    if (!newName || newName.length === 0 || !newNumber || newNumber.length === 0) {
+      alert("Please enter a name and number");
       return;
     }
+
+    const existingPerson = persons.find(person => person.name === newName);
+    
+    // If person is already in phonebook, update number
+    if (existingPerson) {
+      const shouldUpdateNumber = window.confirm(
+        `${newName} is already added to phonebook, ` +
+        `replace the the old number with a new one?`
+      );
+      
+      if (shouldUpdateNumber) {
+        const id = existingPerson.id;
+
+        // Create new person object with new number and copy other existing data
+        const updatedPerson = { ...existingPerson, number: newNumber };
+
+        // Update person in backend server
+        personService
+          .update(id, updatedPerson)
+          .then(returnedPerson => {
+            // Update state to reflect updated person's information
+            setPersons(persons.map(p => p.id !== id ? p : returnedPerson));
+
+          })
+          .catch(error => {
+            alert(
+              `The person '${existingPerson.name}' was already deleted from server`
+            );
+            // Remove person from state and update UI
+            setPersons(persons.filter(p => p.id !== id));
+            // Clear input fields
+            setNewName('');
+            setNewNumber('');
+          })
+      }
+
+      return;
+    }
+
     // Create new person
     const personObject = {
       name: newName,
@@ -51,6 +91,7 @@ const App = () => {
     const shouldDeletePerson = window.confirm(`Delete ${person.name} ?`);
 
     if (shouldDeletePerson) {
+      // Delete person from backend server
       personService
         .deletePerson(id)
         .then(returnedPerson => {
