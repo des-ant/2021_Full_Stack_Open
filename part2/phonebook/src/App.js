@@ -44,22 +44,27 @@ const App = () => {
         setNewName('');
         setNewNumber('');
       });
-  }
+  };
+
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id);
+    window.confirm(`Delete ${person.name} ?`);
+  };
 
   const handleNameChange = (event) => {
     // Update field value when typing in field
     setNewName(event.target.value);
-  }
+  };
 
   const handleNumberChange = (event) => {
     // Update field value when typing in field
     setNewNumber(event.target.value);
-  }
+  };
 
   const handleSearchFieldChange = (event) => {
     // Update field value when typing in field
     setSearchField(event.target.value);
-  }
+  };
 
   // If text present in search field,
   // Use text to filter names (case-insensitive)
@@ -90,9 +95,17 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons peopleToShow={peopleToShow} />
+      <div>
+        {peopleToShow.map(person =>
+          <Persons
+            key={person.id}
+            person={person}
+            deletePerson={() => deletePerson(person.id)}
+          />
+        )}
+      </div>
     </div>
   )
-}
+};
 
 export default App;

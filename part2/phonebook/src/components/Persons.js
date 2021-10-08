@@ -1,13 +1,10 @@
 import React from 'react';
 
-const Persons = ({ peopleToShow }) => {
+const Persons = ({ person, deletePerson }) => {
   return (
     <div>
-      <ul>
-        {peopleToShow.map(person =>
-          <li key={person.id}>{person.name} {person.number}</li>
-        )}
-      </ul>
+      {person.name} {person.number} {' '}
+      <button onClick={deletePerson}>delete</button>
     </div>
   )
 };
