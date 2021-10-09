@@ -3,12 +3,14 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personService from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchField, setSearchField ] = useState('');
+  const [ errorMessage, setErrorMessage ] = useState(null);
 
   // Set initial state using data fetched from server using axios
   // Complete fetching with an Effect hook
@@ -51,7 +53,16 @@ const App = () => {
           .then(returnedPerson => {
             // Update state to reflect updated person's information
             setPersons(persons.map(p => p.id !== id ? p : returnedPerson));
-
+            // Clear input fields
+            setNewName('');
+            setNewNumber('');
+            // Show success notification
+            setErrorMessage(
+              `Updated ${returnedPerson.name}`
+            );
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000);
           })
           .catch(error => {
             alert(
@@ -83,6 +94,13 @@ const App = () => {
         // Clear input fields
         setNewName('');
         setNewNumber('');
+        // Show success notification
+        setErrorMessage(
+          `Added ${returnedPerson.name}`
+        );
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
       });
   };
 
@@ -134,6 +152,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={errorMessage} />
 
       <Filter
         searchField={searchField}
