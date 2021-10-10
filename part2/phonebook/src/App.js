@@ -10,7 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchField, setSearchField ] = useState('');
-  const [ errorMessage, setErrorMessage ] = useState(null);
+  const [ alertMessage, setAlertMessage ] = useState(null);
+  const [ alertType, setAlertType ] = useState('');
 
   // Set initial state using data fetched from server using axios
   // Complete fetching with an Effect hook
@@ -28,7 +29,12 @@ const App = () => {
 
     // Prevent user from adding empty values
     if (!newName || newName.length === 0 || !newNumber || newNumber.length === 0) {
-      alert("Please enter a name and number");
+      // Show error notification
+      setAlertMessage("Please enter a name and number");
+      setAlertType('error');
+      setTimeout(() => {
+        setAlertMessage(null)
+      }, 5000);
       return;
     }
 
@@ -57,17 +63,23 @@ const App = () => {
             setNewName('');
             setNewNumber('');
             // Show success notification
-            setErrorMessage(
+            setAlertMessage(
               `Updated ${returnedPerson.name}`
             );
+            setAlertType('success');
             setTimeout(() => {
-              setErrorMessage(null)
+              setAlertMessage(null)
             }, 5000);
           })
           .catch(error => {
-            alert(
-              `The person '${existingPerson.name}' was already deleted from server`
+            // Show error notification
+            setAlertMessage(
+              `Information of '${existingPerson.name}' has already been removed from server`
             );
+            setAlertType('error');
+            setTimeout(() => {
+              setAlertMessage(null)
+            }, 5000);
             // Remove person from state and update UI
             setPersons(persons.filter(p => p.id !== id));
             // Clear input fields
@@ -95,11 +107,12 @@ const App = () => {
         setNewName('');
         setNewNumber('');
         // Show success notification
-        setErrorMessage(
+        setAlertMessage(
           `Added ${returnedPerson.name}`
         );
+        setAlertType('success');
         setTimeout(() => {
-          setErrorMessage(null)
+          setAlertMessage(null)
         }, 5000);
       });
   };
@@ -117,9 +130,14 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== id));
         })
         .catch(error => {
-          alert(
+          // Show error notification
+          setAlertMessage(
             `The person '${person.name}' was already deleted from server`
           );
+          setAlertType('error');
+          setTimeout(() => {
+            setAlertMessage(null)
+          }, 5000);
           // Remove person from state and update UI
           setPersons(persons.filter(p => p.id !== id));
         })
@@ -153,7 +171,10 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={errorMessage} />
+      <Notification
+        message={alertMessage}
+        type={alertType}
+      />
 
       <Filter
         searchField={searchField}
