@@ -74,17 +74,9 @@ const App = () => {
           .catch(error => {
             // Show error notification
             setAlertMessage(
-              `Information of '${existingPerson.name}' has already been removed from server`
+              `${error.response.data.error}`
             );
             setAlertType('error');
-            setTimeout(() => {
-              setAlertMessage(null)
-            }, 5000);
-            // Remove person from state and update UI
-            setPersons(persons.filter(p => p.id !== id));
-            // Clear input fields
-            setNewName('');
-            setNewNumber('');
           })
       }
 
@@ -100,20 +92,27 @@ const App = () => {
     // Add person to backend server
     personService
       .create(personObject)
-      .then(returnedPerson => {
+      .then(createdPerson => {
         // Add person to persons list without mutating list
-        setPersons(persons.concat(returnedPerson));
+        setPersons(persons.concat(createdPerson));
         // Clear input fields
         setNewName('');
         setNewNumber('');
         // Show success notification
         setAlertMessage(
-          `Added ${returnedPerson.name}`
+          `Added ${createdPerson.name}`
         );
         setAlertType('success');
         setTimeout(() => {
           setAlertMessage(null)
         }, 5000);
+      })
+      .catch(error => {
+        // Show error notification
+        setAlertMessage(
+          `${error.response.data.error}`
+        );
+        setAlertType('error');
       });
   };
 
